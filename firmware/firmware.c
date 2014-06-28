@@ -195,6 +195,56 @@ void set_leds(int h, int s, int v) {
   ws2812_setleds(led,14);
 }
 
+#define SET_COLOR(digit,n,c) ((digit & (1<<n))==(1<<n)?c:0)
+#define SET_LED(bcd,i,d) led[i].r = SET_COLOR(bcd,d,r); \
+                         led[i].g = SET_COLOR(bcd,d,g); \
+		         led[i].b = SET_COLOR(bcd,d,b);
+				
+void set_bcd_leds(uint8_t bcd1, uint8_t bcd2, int h, int s, int v) {
+  int r;
+  int g;
+  int b;
+  hsv_to_rgb(h, s, v, &r, &g, &b);
+
+  struct cRGB led[14];
+
+  SET_LED(bcd1,7,5);
+  SET_LED(bcd1,8,0);
+  SET_LED(bcd1,9,1);
+  SET_LED(bcd1,10,6);
+  SET_LED(bcd1,11,2);
+  SET_LED(bcd1,12,3);
+  SET_LED(bcd1,13,4);
+
+  SET_LED(bcd2,0,4);
+  SET_LED(bcd2,1,3);
+  SET_LED(bcd2,2,2);
+  SET_LED(bcd2,3,6);
+  SET_LED(bcd2,4,5);
+  SET_LED(bcd2,5,0);
+  SET_LED(bcd2,6,1);
+
+  
+  ws2812_setleds(led, 14);
+}
+
+static uint8_t bcd[] = {
+  0b00111111, //"0"
+  0b00000110, //"1"
+  0b01011011, //"2"
+  0b01001111, //"3"
+  0b01100110, //"4"
+  0b01101101, //"5"
+  0b01111101, //"6"
+  0b00000111, //"7"
+  0b01111111, //"8"
+  0b01101111  //"9"
+};
+
+// BCD-Decode
+uint8_t bcd_decode(uint8_t digit) {
+  return bcd[digit%10];
+}
 
 /// main routine
 int main(void) {
@@ -204,26 +254,27 @@ int main(void) {
   // activate the AVR internal Watch Dog Timer
 //  wdt_enable(WDTO_1S);
   
-  int h;
+  uint8_t h = 0;
   
-  int off=128;
-  int on=16;
+  uint8_t c = 0;
 
     struct cRGB led[14];
 
   while(1) {
+    
     // reset the WDT
   //  wdt_reset();
     
-    // some idle time here
-    //_delay_ms(15);
     
-	for (h = 0; h <= 360; h++) {
-	   set_leds(h, 64, 64);
-	   _delay_ms(10);
-	}
+    
+    // only last digit for now
+    uint8_t bcd1 = bcd_decode(c/10);
+    uint8_t bcd2 = bcd_decode(c%10);
 
-    
+    set_bcd_leds(bcd2, bcd1, h++, 128, 128);
+
+    _delay_ms(250);
+    if (++c  >= 100) c = 0;
   } // while
   
   return 0;
