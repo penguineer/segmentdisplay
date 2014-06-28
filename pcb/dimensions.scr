@@ -1,0 +1,25 @@
+# DXF2SCR generated script file.
+Grid mil 1 off;
+Set Wire_Bend 2;
+Layer Dimension;
+Change Font Vector;
+Wire 1 (-0 3543) (4331 3543);
+Wire 1 (0 -0) (-0 3543);
+Wire 1 (4331 3543) (4331 -0);
+Wire 1 (4331 -0) (0 -0);
+Circle 1 (1840 1275) (1840 1353);
+Circle 1 (1977 2249) (1977 2328);
+Circle 1 (856 1275) (856 1353);
+Circle 1 (1417 1762) (1417 1841);
+Circle 1 (1553 2737) (1553 2815);
+Circle 1 (993 2249) (993 2328);
+Circle 1 (1280 787) (1280 866);
+Circle 1 (2991 1762) (2991 1841);
+Circle 1 (2854 787) (2854 866);
+Circle 1 (2431 1275) (2431 1353);
+Circle 1 (3128 2737) (3128 2815);
+Circle 1 (2568 2249) (2568 2328);
+Circle 1 (3415 1275) (3415 1353);
+Circle 1 (3552 2249) (3552 2328);
+Window Fit;
+# lines=4, arcs=0, circles=14
