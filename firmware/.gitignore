@@ -1,0 +1,5 @@
+firmware.elf
+firmware.hex
+firmware.o
+light_ws2812/light_ws2812.o
+
